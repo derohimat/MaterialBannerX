@@ -4,7 +4,8 @@ android {
     compileSdkVersion 28
     buildToolsVersion '28.0.3'
     defaultConfig {
-        applicationId "com.freegeek.android.materialbanner.demo"
+        applicationId "com.derohimat.materialbannerx.demo"
+
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1
@@ -16,14 +17,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    productFlavors {
-    }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':lib')
-    implementation "com.android.support:appcompat-v7:$compileVersion"
+    implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation "com.squareup.picasso:picasso:2.71828"
-    testImplementation 'junit:junit:4.12'
 }

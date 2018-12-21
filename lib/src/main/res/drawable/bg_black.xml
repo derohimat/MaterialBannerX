@@ -20,9 +20,9 @@
     <item android:state_enabled="true">
         <shape>
             <gradient
-                android:startColor="#53000000"
                 android:angle="-90"
-                android:endColor="#00000000"/>
+                android:endColor="#00000000"
+                android:startColor="#53000000"/>
         </shape>
     </item>
 </selector>

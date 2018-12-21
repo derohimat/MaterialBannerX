@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MaterialBanner</string>
+    <string name="app_name">MaterialBannerX Demo</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="action_settings">Settings</string>
 </resources>

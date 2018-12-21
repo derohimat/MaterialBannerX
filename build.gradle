@@ -1,5 +1,4 @@
 buildscript {
-    ext.compileVersion = '28.0.0'
     repositories {
         jcenter()
         google()

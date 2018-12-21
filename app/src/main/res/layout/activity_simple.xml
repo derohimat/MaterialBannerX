@@ -7,9 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.freegeek.android.materialbanner.demo.SimpleActivity">
+    tools:context="com.derohimat.android.materialbanner.demo.com.derohimat.materialbannerx.demo.SimpleActivity">
 
-    <com.freegeek.android.materialbanner.MaterialBanner
+    <com.derohimat.materialbannerx.MaterialBannerX
         android:id="@+id/material_banner"
         android:layout_width="match_parent"
         android:layout_height="200dp"

@@ -18,7 +18,7 @@
 
 <resources>
 
-    <declare-styleable name="MaterialBanner">
+    <declare-styleable name="MaterialBannerX">
         <attr name="indicatorMargin" format="dimension"/>
         <attr name="indicatorInside" format="boolean"/>
         <attr name="match" format="boolean"/>
