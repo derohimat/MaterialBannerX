@@ -44,7 +44,7 @@ import java.util.List;
  * @author Jack Fu <rtugeek@gmail.com>
  * @date 2016/9/20
  */
-public class MaterialBanner<T> extends FrameLayout{
+public class MaterialBanner<T> extends FrameLayout {
     private MaterialViewPager mViewPager;
     private PageIndicator mPageIndicator;
     private List mData;
@@ -61,6 +61,9 @@ public class MaterialBanner<T> extends FrameLayout{
     private boolean mMatch = false;
     private CardView mCardView;
     private IndicatorGravity mIndicatorGravity = IndicatorGravity.LEFT;
+    private AdSwitchTask adSwitchTask;
+    private ViewPager.OnPageChangeListener mOnPageChangeListener;
+
     public MaterialBanner(Context context) {
         super(context);
         init(context);
@@ -68,33 +71,38 @@ public class MaterialBanner<T> extends FrameLayout{
 
     public MaterialBanner(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init(context,attrs);
+        init(context, attrs);
     }
 
     public MaterialBanner(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init(context,attrs);
+        init(context, attrs);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public MaterialBanner(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
-        init(context,attrs);
+        init(context, attrs);
     }
 
-    private void init(Context context){
-        init(context,null);
+    public static int dip2Pix(Context context, float dip) {
+        final float scale = context.getResources().getDisplayMetrics().density;
+        return (int) (dip * scale + 0.5f);
     }
 
-    private void init(Context context,AttributeSet attrs){
-        TypedArray a = context.obtainStyledAttributes(attrs,R.styleable.MaterialBanner);
-        mIndicatorMargin = (int) a.getDimension(R.styleable.MaterialBanner_indicatorMargin,dip2Pix(context,10));
-        mIndicatorGravity = IndicatorGravity.valueOf(a.getInt(R.styleable.MaterialBanner_indicatorGravity,0));
-        mIndicatorInside = a.getBoolean(R.styleable.MaterialBanner_indicatorInside,true);
-        mMatch = a.getBoolean(R.styleable.MaterialBanner_match,false);
+    private void init(Context context) {
+        init(context, null);
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MaterialBanner);
+        mIndicatorMargin = (int) a.getDimension(R.styleable.MaterialBanner_indicatorMargin, dip2Pix(context, 10));
+        mIndicatorGravity = IndicatorGravity.valueOf(a.getInt(R.styleable.MaterialBanner_indicatorGravity, 0));
+        mIndicatorInside = a.getBoolean(R.styleable.MaterialBanner_indicatorInside, true);
+        mMatch = a.getBoolean(R.styleable.MaterialBanner_match, false);
         a.recycle();
 
-        View view = LayoutInflater.from(context).inflate(R.layout.material_banner,this,true);
+        View view = LayoutInflater.from(context).inflate(R.layout.material_banner, this, true);
 
         mCardView = view.findViewById(R.id.card_view);
         mViewPager = view.findViewById(R.id.view_pager);
@@ -109,11 +117,11 @@ public class MaterialBanner<T> extends FrameLayout{
         mCardParams.gravity = Gravity.TOP;
 
         //set Z value. bring indicator view to front,view.bringToFront does't work on 6.0
-        ViewCompat.setZ(mCardView,1);
-        ViewCompat.setZ(mViewPager,2);
+        ViewCompat.setZ(mCardView, 1);
+        ViewCompat.setZ(mViewPager, 2);
 
-        ViewCompat.setZ(mCardContainer,1);
-        ViewCompat.setZ(mIndicatorContainer,2);
+        ViewCompat.setZ(mCardContainer, 1);
+        ViewCompat.setZ(mIndicatorContainer, 2);
 
         updateMargin();
         setMatch(mMatch);
@@ -121,9 +129,9 @@ public class MaterialBanner<T> extends FrameLayout{
 
     }
 
-    private void updateIndicatorMargin(){
-        mIndicatorParams.setMargins(mIndicatorMargin,mIndicatorMargin,mIndicatorMargin,mIndicatorMargin);
-        if(mPageIndicator != null){
+    private void updateIndicatorMargin() {
+        mIndicatorParams.setMargins(mIndicatorMargin, mIndicatorMargin, mIndicatorMargin, mIndicatorMargin);
+        if (mPageIndicator != null) {
             mPageIndicator.getView().setLayoutParams(mIndicatorParams);
         }
     }
@@ -135,19 +143,19 @@ public class MaterialBanner<T> extends FrameLayout{
         return this;
     }
 
-    public MaterialBanner setIndicator(PageIndicator pageIndicator){
-        if(mPageIndicator == pageIndicator) {
+    public MaterialBanner setIndicator(PageIndicator pageIndicator) {
+        if (mPageIndicator == pageIndicator) {
             return this;
         }
 
         //remove old indicator view first;
-        if(mPageIndicator != null) {
+        if (mPageIndicator != null) {
             mIndicatorContainer.removeView(mPageIndicator.getView());
         }
         mPageIndicator = pageIndicator;
         mPageIndicator.setViewPager(mViewPager);
         mPageIndicator.setCurrentItem(getCurrentItem());
-        mIndicatorContainer.addView(mPageIndicator.getView(),mIndicatorParams);
+        mIndicatorContainer.addView(mPageIndicator.getView(), mIndicatorParams);
         //update listener
         setOnPageChangeListener(mOnPageChangeListener);
         //get the real height then update margin;
@@ -161,43 +169,41 @@ public class MaterialBanner<T> extends FrameLayout{
         return this;
     }
 
-    public MaterialBanner setIndicatorMargin(int unit){
+    public MaterialBanner setIndicatorMargin(int unit) {
         mIndicatorMargin = unit;
         updateIndicatorMargin();
         return this;
     }
 
-    public MaterialBanner setIndicatorInside(boolean inside){
+    public boolean isIndicatorInside() {
+        return mIndicatorInside;
+    }
+
+    public MaterialBanner setIndicatorInside(boolean inside) {
         mIndicatorInside = inside;
         updateMargin();
         return this;
     }
 
-    public boolean isIndicatorInside(){
-        return mIndicatorInside;
-    }
-
-
     /**
      * update the margin value of indicator and cardContainer
      */
-    private void updateMargin(){
-        if(mPageIndicator == null) {
+    private void updateMargin() {
+        if (mPageIndicator == null) {
             return;
         }
         updateIndicatorMargin();
-        if(!mIndicatorInside){
+        if (!mIndicatorInside) {
             //set margin according to the mIndicatorContainer height
             mCardParams.bottomMargin = mIndicatorContainer.getHeight();
-        }else{
+        } else {
             mCardParams.bottomMargin = 0;
         }
         mCardContainer.setLayoutParams(mCardParams);
         invalidate();
     }
 
-
-    public MaterialBanner setOnItemClickListener(OnItemClickListener onItemClickListener){
+    public MaterialBanner setOnItemClickListener(OnItemClickListener onItemClickListener) {
         if (onItemClickListener == null) {
             mViewPager.setOnItemClickListener(null);
             return this;
@@ -206,71 +212,39 @@ public class MaterialBanner<T> extends FrameLayout{
         return this;
     }
 
-    public void setAdapter(MaterialPageAdapter adapter){
+    public MaterialPageAdapter getAdapter() {
+        return mPageAdapter;
+    }
+
+    public void setAdapter(MaterialPageAdapter adapter) {
         mPageAdapter = adapter;
         mViewPager.setAdapter(adapter);
-        if(mPageIndicator != null) {
+        if (mPageIndicator != null) {
             mPageIndicator.setViewPager(mViewPager);
         }
     }
 
-
-    public MaterialPageAdapter getAdapter(){
-        return mPageAdapter ;
-    }
-
-    private AdSwitchTask adSwitchTask ;
-
-
-    static class AdSwitchTask implements Runnable {
-
-        private final WeakReference<MaterialBanner> reference;
-
-        AdSwitchTask(MaterialBanner materialbanner) {
-            this.reference = new WeakReference(materialbanner);
-        }
-
-        @Override
-        public void run() {
-            MaterialBanner materialBanner = reference.get();
-
-            if(materialBanner != null){
-                if (materialBanner.mViewPager != null && materialBanner.turning) {
-                    int page = materialBanner.mViewPager.getCurrentItem() + 1;
-                    if(page >= materialBanner.mData.size()) {
-                        page = 0;
-                    }
-                    materialBanner.mViewPager.setCurrentItem(page % materialBanner.mData.size());
-                    materialBanner.postDelayed(materialBanner.adSwitchTask, materialBanner.autoTurningTime);
-                }
-            }
-        }
-    }
-
-    public MaterialBanner setPages(ViewHolderCreator holderCreator, List<T> data){
+    public MaterialBanner setPages(ViewHolderCreator holderCreator, List<T> data) {
         this.mData = data;
         mPageAdapter = new MaterialPageAdapter(holderCreator, mData);
         mViewPager.setAdapter(mPageAdapter);
 
-        if(mPageIndicator != null) {
+        if (mPageIndicator != null) {
             mPageIndicator.setViewPager(mViewPager);
         }
         return this;
     }
 
-
-    public void notifyDataSetChanged(){
+    public void notifyDataSetChanged() {
         mViewPager.getAdapter().notifyDataSetChanged();
     }
-
 
     public boolean isTurning() {
         return turning;
     }
 
-
     public MaterialBanner startTurning(long autoTurningTime) {
-        if(turning){
+        if (turning) {
             stopTurning();
         }
         canTurn = true;
@@ -285,9 +259,7 @@ public class MaterialBanner<T> extends FrameLayout{
         removeCallbacks(adSwitchTask);
     }
 
-
     /**
-     *
      * @param transformer
      * @return
      */
@@ -295,7 +267,6 @@ public class MaterialBanner<T> extends FrameLayout{
         mViewPager.setPageTransformer(true, transformer);
         return this;
     }
-
 
     public boolean isManualPageable() {
         return mViewPager.isCanScroll();
@@ -309,7 +280,7 @@ public class MaterialBanner<T> extends FrameLayout{
     public boolean dispatchTouchEvent(MotionEvent ev) {
 
         int action = ev.getAction();
-        if (action == MotionEvent.ACTION_UP||action == MotionEvent.ACTION_CANCEL||action == MotionEvent.ACTION_OUTSIDE) {
+        if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL || action == MotionEvent.ACTION_OUTSIDE) {
             if (canTurn) {
                 startTurning(autoTurningTime);
             }
@@ -321,25 +292,25 @@ public class MaterialBanner<T> extends FrameLayout{
         return super.dispatchTouchEvent(ev);
     }
 
-    public int getCurrentItem(){
-        if (mViewPager !=null) {
+    public int getCurrentItem() {
+        if (mViewPager != null) {
             return mViewPager.getItem();
         }
         return -1;
     }
-    public void setCurrentItem(int index){
-        if (mViewPager !=null) {
+
+    public void setCurrentItem(int index) {
+        if (mViewPager != null) {
             mViewPager.setCurrentItem(index);
         }
     }
 
-    private ViewPager.OnPageChangeListener mOnPageChangeListener;
     public MaterialBanner setOnPageChangeListener(ViewPager.OnPageChangeListener onPageChangeListener) {
         mOnPageChangeListener = onPageChangeListener;
-        if(mPageIndicator != null ){
+        if (mPageIndicator != null) {
             mPageIndicator.setOnPageChangeListener(onPageChangeListener);
             mViewPager.setOnPageChangeListener(mPageIndicator);
-        }else{
+        } else {
             mViewPager.setOnPageChangeListener(onPageChangeListener);
         }
         return this;
@@ -349,53 +320,73 @@ public class MaterialBanner<T> extends FrameLayout{
         return mViewPager;
     }
 
-    public interface OnItemClickListener{
-
-        void onItemClick(int position);
-    }
-
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
     }
 
+    public boolean isMatch() {
+        return mMatch;
+    }
+
     /**
      * whether banner match parent or not. In other word make the viewpager cover the cardView.
+     *
      * @param match
      */
-    public MaterialBanner setMatch(boolean match){
+    public MaterialBanner setMatch(boolean match) {
         mMatch = match;
-        if(mMatch){
-            if(!mViewPager.getParent().equals(mCardContainer)){
+        if (mMatch) {
+            if (!mViewPager.getParent().equals(mCardContainer)) {
                 mCardView.removeView(mViewPager);
-                mCardContainer.addView(mViewPager, LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
+                mCardContainer.addView(mViewPager, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             }
-        }else{
-            if(!mViewPager.getParent().equals(mCardView)){
+        } else {
+            if (!mViewPager.getParent().equals(mCardView)) {
                 mCardContainer.removeView(mViewPager);
-                mCardView.addView(mViewPager, LayoutParams.MATCH_PARENT,LayoutParams.MATCH_PARENT);
+                mCardView.addView(mViewPager, LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
             }
         }
         return this;
     }
 
-    public boolean isMatch(){
-        return mMatch;
-    }
-
-
-    public static int dip2Pix(Context context,float dip){
-        final float scale = context.getResources().getDisplayMetrics().density;
-        return (int) (dip * scale + 0.5f);
-    }
-
-    public CardView getCardView(){
+    public CardView getCardView() {
         return mCardView;
     }
 
-    public FrameLayout getIndicatorContainer(){
+    public FrameLayout getIndicatorContainer() {
         return mIndicatorContainer;
+    }
+
+    public interface OnItemClickListener {
+
+        void onItemClick(int position);
+    }
+
+    static class AdSwitchTask implements Runnable {
+
+        private final WeakReference<MaterialBanner> reference;
+
+        AdSwitchTask(MaterialBanner materialbanner) {
+            this.reference = new WeakReference(materialbanner);
+        }
+
+        @Override
+        public void run() {
+            MaterialBanner materialBanner = reference.get();
+
+            if (materialBanner != null) {
+                if (materialBanner.mViewPager != null && materialBanner.turning) {
+                    int page = materialBanner.mViewPager.getCurrentItem() + 1;
+                    if (page >= materialBanner.mData.size()) {
+                        page = 0;
+                    }
+                    materialBanner.mViewPager.setCurrentItem(page % materialBanner.mData.size());
+                    materialBanner.postDelayed(materialBanner.adSwitchTask, materialBanner.autoTurningTime);
+                }
+            }
+        }
     }
 
 

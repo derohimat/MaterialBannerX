@@ -5,10 +5,9 @@ import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.freegeek.android.materialbanner.R;
-import com.freegeek.android.materialbanner.holder.ViewHolderCreator;
 import com.freegeek.android.materialbanner.holder.Holder;
+import com.freegeek.android.materialbanner.holder.ViewHolderCreator;
 import com.freegeek.android.materialbanner.view.MaterialViewPager;
 import com.freegeek.android.materialbanner.view.indicator.IconPagerAdapter;
 
@@ -27,6 +26,11 @@ public class MaterialPageAdapter extends PagerAdapter implements IconPagerAdapte
     protected ViewHolderCreator holderCreator;
     protected MaterialViewPager viewPager;
 
+
+    public MaterialPageAdapter(ViewHolderCreator holderCreator, List data) {
+        this.holderCreator = holderCreator;
+        this.mData = data;
+    }
 
     @Override
     public int getIconResId(int index) {
@@ -76,14 +80,8 @@ public class MaterialPageAdapter extends PagerAdapter implements IconPagerAdapte
         return view == object;
     }
 
-
     public void setViewPager(MaterialViewPager viewPager) {
         this.viewPager = viewPager;
-    }
-
-    public MaterialPageAdapter(ViewHolderCreator holderCreator, List data) {
-        this.holderCreator = holderCreator;
-        this.mData = data;
     }
 
     public View getView(int position, View view, ViewGroup container) {

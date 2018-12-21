@@ -19,6 +19,7 @@ import com.freegeek.android.materialbanner.view.indicator.LinePageIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * @author Jack Fu <rtugeek@gmail.com>
  * @date 2018/06/08
@@ -29,23 +30,20 @@ public class MainActivity extends AppCompatActivity {
             R.drawable.home_3,
             R.drawable.home_4,
             R.drawable.home_5};
-
+    List<SimpleBannerData> list = new ArrayList<>();
+    List<Integer> icons = new ArrayList<>();
+    int index = 0;
+    int gravity = 0;
     private int[] iconIds = new int[]{android.R.drawable.ic_menu_camera,
             android.R.drawable.ic_menu_gallery,
             android.R.drawable.ic_menu_call,
             android.R.drawable.ic_menu_close_clear_cancel,
             android.R.drawable.ic_dialog_map};
-
     private MaterialBanner<SimpleBannerData> materialBanner;
     private TextView textView;
-
     private CirclePageIndicator circlePageIndicator;
     private LinePageIndicator linePageIndicator;
     private IconPageIndicator iconPageIndicator;
-
-
-    List<SimpleBannerData> list = new ArrayList<>();
-    List<Integer> icons = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,8 +116,6 @@ public class MainActivity extends AppCompatActivity {
         materialBanner.setIndicatorInside(!materialBanner.isIndicatorInside());
     }
 
-    int index = 0;
-
     public void changeType(View view) {
         switch (index % 3) {
             case 2:
@@ -138,8 +134,6 @@ public class MainActivity extends AppCompatActivity {
         }
         index++;
     }
-
-    int gravity = 0;
 
     public void changeGravity(View view) {
         IndicatorGravity indicatorGravity = IndicatorGravity.valueOf(gravity);

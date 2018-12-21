@@ -1,13 +1,13 @@
 package com.freegeek.android.materialbanner.demo;
 
 
-import android.app.Activity;
-
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.support.v13.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,18 +22,22 @@ import com.freegeek.android.materialbanner.simple.SimpleHolder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TestActivity extends Activity {
+public class TestActivity extends AppCompatActivity {
 
+    private static int[] images = {R.drawable.home_1,
+            R.drawable.home_2,
+            R.drawable.home_3,
+            R.drawable.home_4,
+            R.drawable.home_5};
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
      * {@link FragmentPagerAdapter} derivative, which will keep every
      * loaded fragment in memory. If this becomes too memory intensive, it
      * may be best to switch to a
-     * {@link android.support.v13.app.FragmentStatePagerAdapter}.
+     * {@link FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
     /**
      * The {@link ViewPager} that will host the section contents.
      */
@@ -45,7 +49,7 @@ public class TestActivity extends Activity {
         setContentView(R.layout.activity_test);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = findViewById(R.id.container);
@@ -53,7 +57,6 @@ public class TestActivity extends Activity {
 
 
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,11 +79,7 @@ public class TestActivity extends Activity {
 
         return super.onOptionsItemSelected(item);
     }
-    private static int[] images = {R.drawable.home_1,
-            R.drawable.home_2,
-            R.drawable.home_3,
-            R.drawable.home_4,
-            R.drawable.home_5};
+
     /**
      * A placeholder fragment containing a simple view.
      */

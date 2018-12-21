@@ -25,6 +25,5 @@ dependencies {
     implementation project(':lib')
     implementation "com.android.support:appcompat-v7:$compileVersion"
     implementation "com.squareup.picasso:picasso:2.71828"
-    implementation "com.android.support:support-v13:$compileVersion"
     testImplementation 'junit:junit:4.12'
 }

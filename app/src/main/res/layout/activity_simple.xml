@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_simple"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,22 +12,22 @@
     <com.freegeek.android.materialbanner.MaterialBanner
         android:id="@+id/material_banner"
         android:layout_width="match_parent"
-        app:indicatorInside="true"
+        android:layout_height="200dp"
         app:indicatorGravity="center"
-        app:match="true"
-        android:layout_height="200dp"/>
+        app:indicatorInside="true"
+        app:match="true"/>
 
     <Button
-        android:text="Advanced"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="advanced"
+        android:text="Advanced"
         />
 
     <Button
-        android:text="Advanced2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="advanced2"
+        android:text="Advanced2"
         />
 </LinearLayout>

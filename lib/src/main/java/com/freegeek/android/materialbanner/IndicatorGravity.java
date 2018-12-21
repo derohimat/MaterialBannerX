@@ -9,9 +9,10 @@ import android.view.Gravity;
 
 public enum IndicatorGravity {
 
-    LEFT,CENTER,RIGHT;
-    public static IndicatorGravity valueOf(int i){
-        switch (i%3){
+    LEFT, CENTER, RIGHT;
+
+    public static IndicatorGravity valueOf(int i) {
+        switch (i % 3) {
             case 0:
                 return LEFT;
             case 1:
@@ -20,8 +21,8 @@ public enum IndicatorGravity {
         return RIGHT;
     }
 
-    public static int toGravity(IndicatorGravity gravity){
-        switch (gravity){
+    public static int toGravity(IndicatorGravity gravity) {
+        switch (gravity) {
             case LEFT:
                 return Gravity.LEFT;
             case CENTER:

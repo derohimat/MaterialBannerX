@@ -13,6 +13,7 @@ import com.freegeek.android.materialbanner.view.indicator.CirclePageIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
+
 /**
  * @author Jack Fu <rtugeek@gmail.com>
  * @date 2018/06/08

@@ -5,5 +5,5 @@ package com.freegeek.android.materialbanner.holder;
  * @date 2014/11/30
  */
 public interface ViewHolderCreator<Holder> {
-	Holder createHolder();
+    Holder createHolder();
 }

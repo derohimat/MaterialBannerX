@@ -23,8 +23,6 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
-import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 
@@ -46,9 +44,11 @@ public class IconPageIndicator extends HorizontalScrollView implements PageIndic
     private int mSelectedIndex = -1;
     private boolean mFirstScale = true;
     private float mSelectedScale = 1.2f;
+
     public IconPageIndicator(Context context) {
         this(context, null);
     }
+
     public IconPageIndicator(Context context, AttributeSet attrs) {
         super(context, attrs);
         setHorizontalScrollBarEnabled(false);
@@ -161,23 +161,23 @@ public class IconPageIndicator extends HorizontalScrollView implements PageIndic
         }
 
         //scale icon
-        if(mFirstScale){
+        if (mFirstScale) {
             View iconView = mIconsLayout.getChildAt(0);
-            if(iconView != null){
+            if (iconView != null) {
                 iconView.setScaleX(mSelectedScale);
                 iconView.setScaleY(mSelectedScale);
             }
             mFirstScale = false;
-        }else{
-            if(mSelectedIndex != item){
+        } else {
+            if (mSelectedIndex != item) {
                 View iconView = mIconsLayout.getChildAt(item);
-                if(iconView != null) {
+                if (iconView != null) {
                     iconView.setScaleX(mSelectedScale);
                     iconView.setScaleY(mSelectedScale);
                 }
 
                 View oldIconView = mIconsLayout.getChildAt(mSelectedIndex);
-                if(oldIconView != null){
+                if (oldIconView != null) {
                     oldIconView.setScaleY(1);
                     oldIconView.setScaleX(1);
                 }

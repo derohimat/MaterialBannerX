@@ -14,20 +14,61 @@ import com.freegeek.android.materialbanner.adapter.MaterialPageAdapter;
  * @date 2018/06/08
  */
 public class MaterialViewPager extends ViewPager {
+    private static final float sens = 5;
     OnPageChangeListener mOuterPageChangeListener;
     private MaterialBanner.OnItemClickListener onItemClickListener;
     private MaterialPageAdapter mAdapter;
     private boolean isCanScroll = true;
+    private float oldX = 0, newX = 0;
+    private OnPageChangeListener onPageChangeListener = new OnPageChangeListener() {
+        private float mPreviousPosition = -1;
 
-    @Override
-    public void setAdapter(PagerAdapter adapter) {
-        mAdapter = (MaterialPageAdapter) adapter;
-        mAdapter.setViewPager(this);
-        super.setAdapter(mAdapter);
+        @Override
+        public void onPageSelected(int position) {
+            if (mPreviousPosition != position) {
+                mPreviousPosition = position;
+                if (mOuterPageChangeListener != null) {
+                    mOuterPageChangeListener.onPageSelected(position);
+                }
+            }
+        }
 
-        setCurrentItem(0, false);
+        @Override
+        public void onPageScrolled(int position, float positionOffset,
+                                   int positionOffsetPixels) {
+
+            if (mOuterPageChangeListener != null) {
+                if (position != mAdapter.getCount() - 1) {
+                    mOuterPageChangeListener.onPageScrolled(position,
+                            positionOffset, positionOffsetPixels);
+                } else {
+                    if (positionOffset > .5) {
+                        mOuterPageChangeListener.onPageScrolled(0, 0, 0);
+                    } else {
+                        mOuterPageChangeListener.onPageScrolled(position,
+                                0, 0);
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+            if (mOuterPageChangeListener != null) {
+                mOuterPageChangeListener.onPageScrollStateChanged(state);
+            }
+        }
+    };
+
+    public MaterialViewPager(Context context) {
+        super(context);
+        init();
     }
 
+    public MaterialViewPager(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
 
     public int getLastItem() {
         return mAdapter.getCount() - 1;
@@ -40,9 +81,6 @@ public class MaterialViewPager extends ViewPager {
     public void setCanScroll(boolean isCanScroll) {
         this.isCanScroll = isCanScroll;
     }
-
-    private float oldX = 0, newX = 0;
-    private static final float sens = 5;
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
@@ -84,6 +122,15 @@ public class MaterialViewPager extends ViewPager {
         return mAdapter;
     }
 
+    @Override
+    public void setAdapter(PagerAdapter adapter) {
+        mAdapter = (MaterialPageAdapter) adapter;
+        mAdapter.setViewPager(this);
+        super.setAdapter(mAdapter);
+
+        setCurrentItem(0, false);
+    }
+
     public int getItem() {
         return mAdapter != null ? super.getCurrentItem() : 0;
     }
@@ -93,61 +140,9 @@ public class MaterialViewPager extends ViewPager {
         mOuterPageChangeListener = listener;
     }
 
-
-    public MaterialViewPager(Context context) {
-        super(context);
-        init();
-    }
-
-    public MaterialViewPager(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
     private void init() {
-        super.setOnPageChangeListener(onPageChangeListener);
+        super.addOnPageChangeListener(onPageChangeListener);
     }
-
-    private OnPageChangeListener onPageChangeListener = new OnPageChangeListener() {
-        private float mPreviousPosition = -1;
-
-        @Override
-        public void onPageSelected(int position) {
-            if (mPreviousPosition != position) {
-                mPreviousPosition = position;
-                if (mOuterPageChangeListener != null) {
-                    mOuterPageChangeListener.onPageSelected(position);
-                }
-            }
-        }
-
-        @Override
-        public void onPageScrolled(int position, float positionOffset,
-                                   int positionOffsetPixels) {
-
-            if (mOuterPageChangeListener != null) {
-                if (position != mAdapter.getCount() - 1) {
-                    mOuterPageChangeListener.onPageScrolled(position,
-                            positionOffset, positionOffsetPixels);
-                } else {
-                    if (positionOffset > .5) {
-                        mOuterPageChangeListener.onPageScrolled(0, 0, 0);
-                    } else {
-                        mOuterPageChangeListener.onPageScrolled(position,
-                                0, 0);
-                    }
-                }
-            }
-        }
-
-        @Override
-        public void onPageScrollStateChanged(int state) {
-            if (mOuterPageChangeListener != null) {
-                mOuterPageChangeListener.onPageScrollStateChanged(state);
-            }
-        }
-    };
-
 
     public void setOnItemClickListener(MaterialBanner.OnItemClickListener clickListener) {
         onItemClickListener = clickListener;
