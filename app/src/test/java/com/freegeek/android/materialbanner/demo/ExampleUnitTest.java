@@ -22,7 +22,7 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void addition_isCorrect() throws Exception {
+    public void addition_isCorrect() {
         A a =new A();
     }
 }

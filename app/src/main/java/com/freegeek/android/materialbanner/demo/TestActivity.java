@@ -48,7 +48,7 @@ public class TestActivity extends Activity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
@@ -119,7 +119,7 @@ public class TestActivity extends Activity {
                 simpleBannerData.add(data);
             }
 
-            MaterialBanner materialBanner = (MaterialBanner) rootView.findViewById(R.id.material_banner);
+            MaterialBanner materialBanner = rootView.findViewById(R.id.material_banner);
             materialBanner.setPages(new ViewHolderCreator() {
                 @Override
                 public Object createHolder() {
